@@ -7,7 +7,7 @@ metadata:
     kubernetes.io/ingress.class: "nginx"  # Annotation specifying the Ingress class
 spec:
   rules:
-  - host: hotcold-stav.octopus.lab  # Host for which the Ingress should route traffic
+  - host: hotcold-yishai.octopus.lab  # Host for which the Ingress should route traffic
     http:
       paths:
       - path: /                       # Path for routing traffic

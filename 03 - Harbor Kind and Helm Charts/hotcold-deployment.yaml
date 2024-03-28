@@ -15,6 +15,6 @@ spec:
     spec:
       containers:
       - name: hotcold-container     # Name of the container
-        image: registry-stav.octopus.lab/hotcold/hotcold:latest   #  Image from our harbor registry
+        image: registry-yishai.octopus.lab/hotcold/hotcold:latest   #  Image from our harbor registry
         ports:
         - containerPort: 8080       # Port to expose on the container
