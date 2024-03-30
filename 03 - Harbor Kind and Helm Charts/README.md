@@ -1,5 +1,4 @@
 # Introduction
-You can checkout the article online at: [k8s.co.il](https://k8s.co.il/kubernetes/deploying-harbor-kind-and-helm-charts/)
 
 As we wrap up our second week at the Octopus Computer Solutions bootcamp, we’ve delved into real-world scenarios of application development and deployment. Assigned with the task of creating a Python application, containerizing it, and orchestrating its deployment using Kubernetes and Helm charts, we’ve tackled the complexities of modern software deployment.
 
@@ -63,7 +62,7 @@ After a while, your cluster will be ready, and you can verify the setup using th
 kubectl cluster-info --context kind-cluster1
 kubectl get nodes
 ```
-![clusterinfo](https://k8s.co.il/wp-content/uploads/2024/02/Screenshot-2024-02-21-223605.png)
+
 
 ### Installing MetalLB
 MetalLB, a software-based load balancer tailored for local Kubernetes environments like Kind, simplifies load balancing tasks. It enables the simulation of load balancer functionality within the cluster by dynamically assigning virtual IP addresses to services. In our project, MetalLB is crucial for exposing services externally in Kind, allowing seamless access to resources, including the Nginx Ingress Controller, for comprehensive testing and development.
@@ -81,7 +80,7 @@ To complete the Layer 2 configuration, MetalLB requires a range of IP addresses 
 # Inspect Docker network for Kind cluster IPAM configuration
 docker network inspect -f '{{.IPAM.Config}}' kind
 ```
-![docker-network](https://k8s.co.il/wp-content/uploads/2024/02/Screenshot-2024-02-21-224051.png)
+
 
 In this scenario, with an output containing a CIDR like 172.18.0.0/16, we aim to allocate load balancer IP addresses from this subnet. To achieve this, MetalLB can be configured to utilize a specific range, such as 172.18.255.200 to 172.18.255.250, by creating an IPAddressPool and the associated L2Advertisement.
 
@@ -139,7 +138,6 @@ helm install harbor bitnami/harbor -n harbor -f values.yaml --create-namespace
 # Once installation is complete, check the service and retrieve the external IP
 kubectl get svc -n harbor
 ```
-![checking](https://k8s.co.il/wp-content/uploads/2024/02/Screenshot-2024-02-21-224736.png)
 
 In my case, the Harbor service load balancer IP is 172.18.255.200. Let’s add an entry in the /etc/hosts file to map the domain (in my case registry-stav.octopus.lab, adjust it according to your domain) to the Harbor load balancer IP. After adding the entry in the /etc/hosts file, let’s try accessing the domain in a browser.
 We will log in via the username: admin and the password: admin
@@ -270,7 +268,7 @@ docker login registry-stav.octopus.lab
 # Push the tagged image to Harbor
 docker push registry-stav.octopus.lab/hotcold/hotcold:latest
 ```
-![pushing](https://k8s.co.il/wp-content/uploads/2024/02/Screenshot-2024-02-21-192738.png)
+
 In the image above, you can observe the output generated during the pushing process.
 
 
@@ -401,8 +399,7 @@ kubectl apply -f service.yaml
 
 # Apply the ingress configuration
 kubectl apply -f ingress.yaml
-```
-![deploying](https://k8s.co.il/wp-content/uploads/2024/02/Screenshot-2024-02-21-193735.png)
+
 In the image above, we’ve implemented all our Kubernetes configuration files. Here, you can observe the output of the pods and the ingress.
 
 ### Creating a Helm Chart from Kubernetes Configurations
@@ -413,7 +410,7 @@ helm create hotcold-chart  # Create a new Helm chart named hotcold-chart
 ```
 After creating the Helm chart with the initial command, you can customize it by modifying the files. In my case, I removed all contents from the templates folder except _helpers.tpl. Then, I created the following files: ingress.yaml, namespace.yaml, deployment.yaml, and service.yaml.
 
-![helm](https://k8s.co.il/wp-content/uploads/2024/02/Screenshot-2024-02-21-194412.png)
+
 In the image provided, you can observe the directory structure of the Helm chart along with the files present in the templates folder.
 
 
@@ -562,15 +559,12 @@ spec:
         - containerPort: 8080
 ```
 
-### Installing our own Helm Chart
+## Installing our own Helm Chart
 and now, after creating and modifying our helm chart we can install it with this command:
 
 
 ``` 
 helm install hotcold ./hotcold-chart
 ```
-![deploying](https://k8s.co.il/wp-content/uploads/2024/02/Screenshot-2024-02-21-195014.png)
-|![hotcold](https://k8s.co.il/wp-content/uploads/2024/02/Screenshot-2024-02-21-194046.png)                | ![hot](https://k8s.co.il/wp-content/uploads/2024/02/Screenshot-2024-02-21-194102-1.png)                        |![cold](https://k8s.co.il/wp-content/uploads/2024/02/Screenshot-2024-02-21-194053-1.png)                         |
-|----------------|-------------------------------|-----------------------------|
-### Summary
+## Summary
 This project outlines the setup of a Kubernetes development environment using Kind and Harbor. We created a local Kubernetes cluster with Kind and established a local registry with Harbor for storing Docker images. Using straightforward YAML configurations, we deployed a Python Flask application and utilized tools like MetalLB and Helm charts for efficient deployment. This article serves as a practical guide for developers looking to replicate similar Kubernetes development setups.
