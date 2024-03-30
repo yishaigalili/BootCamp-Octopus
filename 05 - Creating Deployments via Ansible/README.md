@@ -56,7 +56,7 @@ Creating a playbook called setup.yml to create the environment
     - name: Adding a docker registry to /etc/docker/daemon.json
       ansible.builtin.lineinfile:
         path: /etc/docker/daemon.json
-        line: '{ "insecure-registries": ["docker-stav.octopus.lab"] }'
+        line: '{ "insecure-registries": ["docker-yishai.octopus.lab"] }'
         state: present
 
 
@@ -298,43 +298,43 @@ Creating a jfrog Artifactory:
         mode: '0700'
 
 
-    - name: Generate a private key for docker-stav.octopus.lab
+    - name: Generate a private key for docker-yishai.octopus.lab
       ansible.builtin.openssl_privatekey:
-        path: /etc/ssl/private/docker-stav.octopus.lab.pem
+        path: /etc/ssl/private/docker-yishai.octopus.lab.pem
 
 
     - name: Generate a Certificate Signing Request
       ansible.builtin.openssl_csr:
-        path: /etc/ssl/csr/docker-stav.octopus.lab.csr
-        privatekey_path: /etc/ssl/private/docker-stav.octopus.lab.pem
-        common_name: docker-stav.octopus.lab
+        path: /etc/ssl/csr/docker-yishai.octopus.lab.csr
+        privatekey_path: /etc/ssl/private/docker-yishai.octopus.lab.pem
+        common_name: docker-yishai.octopus.lab
 
 
     - name: Generate a Self Signed OpenSSL certificate
       ansible.builtin.openssl_certificate:
-        path: /etc/ssl/crt/docker-stav.octopus.lab.crt
-        privatekey_path: /etc/ssl/private/docker-stav.octopus.lab.pem
-        csr_path: /etc/ssl/csr/docker-stav.octopus.lab.csr
+        path: /etc/ssl/crt/docker-yishai.octopus.lab.crt
+        privatekey_path: /etc/ssl/private/docker-yishai.octopus.lab.pem
+        csr_path: /etc/ssl/csr/docker-yishai.octopus.lab.csr
         provider: selfsigned
 
 
     - name: Generate a new private key
       ansible.builtin.openssl_privatekey:
-        path: /etc/ssl/private/artifactory-stav.octopus.lab.pem
+        path: /etc/ssl/private/artifactory-yishai.octopus.lab.pem
 
 
     - name: Generate a Certificate Signing Request
       ansible.builtin.openssl_csr:
-        path: /etc/ssl/csr/artifactory-stav.octopus.lab.csr
-        privatekey_path: /etc/ssl/private/artifactory-stav.octopus.lab.pem
-        common_name: artifactory-stav.octopus.lab
+        path: /etc/ssl/csr/artifactory-yishai.octopus.lab.csr
+        privatekey_path: /etc/ssl/private/artifactory-yishai.octopus.lab.pem
+        common_name: artifactory-yishai.octopus.lab
 
 
     - name: Generate a Self Signed OpenSSL certificate
       ansible.builtin.openssl_certificate:
-        path: /etc/ssl/crt/artifactory-stav.octopus.lab.crt
-        privatekey_path: /etc/ssl/private/artifactory-stav.octopus.lab.pem
-        csr_path: /etc/ssl/csr/artifactory-stav.octopus.lab.csr
+        path: /etc/ssl/crt/artifactory-yishai.octopus.lab.crt
+        privatekey_path: /etc/ssl/private/artifactory-yishai.octopus.lab.pem
+        csr_path: /etc/ssl/csr/artifactory-yishai.octopus.lab.csr
         provider: selfsigned
 
 
@@ -416,15 +416,15 @@ Creating a jfrog Artifactory:
 
     - name: Fetch the certificate from the remote host
       ansible.builtin.fetch:
-        src: /etc/ssl/crt/docker-stav.octopus.lab.crt
-        dest: /tmp/docker-stav.octopus.lab.crt
+        src: /etc/ssl/crt/docker-yishai.octopus.lab.crt
+        dest: /tmp/docker-yishai.octopus.lab.crt
         flat: yes
 
 
     - name: Fetch the private key from the remote host
       ansible.builtin.fetch:
-        src: /etc/ssl/private/docker-stav.octopus.lab.pem
-        dest: /tmp/docker-stav.octopus.lab.pem
+        src: /etc/ssl/private/docker-yishai.octopus.lab.pem
+        dest: /tmp/docker-yishai.octopus.lab.pem
         flat: yes
 
 
@@ -440,8 +440,8 @@ Creating a jfrog Artifactory:
             namespace: jfrog
           type: kubernetes.io/tls
           data:
-            tls.crt: "{{ lookup('file', '/tmp/docker-stav.octopus.lab.crt') | b64encode }}"
-            tls.key: "{{ lookup('file', '/tmp/docker-stav.octopus.lab.pem') | b64encode }}"
+            tls.crt: "{{ lookup('file', '/tmp/docker-yishai.octopus.lab.crt') | b64encode }}"
+            tls.key: "{{ lookup('file', '/tmp/docker-yishai.octopus.lab.pem') | b64encode }}"
 
 
     - name: Create an ingress for JFrog Artifactory
@@ -459,11 +459,11 @@ Creating a jfrog Artifactory:
           spec:
             tls:
             - hosts:
-              - artifactory-stav.octopus.lab
-              - docker-stav.octopus.lab
+              - artifactory-yishai.octopus.lab
+              - docker-yishai.octopus.lab
               secretName: artifactory-tls
             rules:
-            - host: artifactory-stav.octopus.lab
+            - host: artifactory-yishai.octopus.lab
               http:
                 paths:
                 - pathType: Prefix
@@ -493,16 +493,16 @@ Creating a jfrog Artifactory:
               ingress.kubernetes.io/proxy-send-timeout: "600"
               nginx.org/client-max-body-size: "0"
               nginx.ingress.kubernetes.io/configuration-snippet: |
-                proxy_set_header    X-JFrog-Override-Base-Url http://docker-stav.octopus.lab;
+                proxy_set_header    X-JFrog-Override-Base-Url http://docker-yishai.octopus.lab;
               nginx.ingress.kubernetes.io/proxy-body-size: "0"
           spec:
             tls:
             - hosts:
-              - artifactory-stav.octopus.lab
-              - docker-stav.octopus.lab
+              - artifactory-yishai.octopus.lab
+              - docker-yishai.octopus.lab
               secretName: artifactory-tls
             rules:
-            - host: docker-stav.octopus.lab
+            - host: docker-yishai.octopus.lab
               http:
                 paths:
                 - pathType: Prefix
@@ -522,20 +522,20 @@ Creating a jfrog Artifactory:
     - name: Apply to hosts file
       ansible.builtin.lineinfile:
         path: /etc/hosts
-        line: "{{ ingress_ip.stdout }} artifactory-stav.octopus.lab"
+        line: "{{ ingress_ip.stdout }} artifactory-yishai.octopus.lab"
         state: present
 
 
     - name: Apply coms to hosts file
       ansible.builtin.lineinfile:
         path: /etc/hosts
-        line: "{{ ingress_ip.stdout }} docker-stav.octopus.lab"
+        line: "{{ ingress_ip.stdout }} docker-yishai.octopus.lab"
         state: present
 
 
     - name: Copy to crt to Docker control plane
       ansible.builtin.shell: |
-        docker cp /etc/ssl/crt/docker-stav.octopus.lab.crt kind-cluster-control-plane:/etc/ssl/certs
+        docker cp /etc/ssl/crt/docker-yishai.octopus.lab.crt kind-cluster-control-plane:/etc/ssl/certs
         docker exec kind-cluster-control-plane update-ca-certificates
         docker exec kind-cluster-control-plane systemctl restart containerd
       become: yes
@@ -543,7 +543,7 @@ Creating a jfrog Artifactory:
 
     - name: Copy to crt to Docker worker
       ansible.builtin.shell: |
-        docker cp /etc/ssl/crt/docker-stav.octopus.lab.crt kind-cluster-worker:/etc/ssl/certs
+        docker cp /etc/ssl/crt/docker-yishai.octopus.lab.crt kind-cluster-worker:/etc/ssl/certs
         docker exec kind-cluster-worker update-ca-certificates
         docker exec kind-cluster-worker systemctl restart containerd
       become: yes
@@ -551,7 +551,7 @@ Creating a jfrog Artifactory:
 
     - name: Copy to crt to Docker worker2
       ansible.builtin.shell: |
-        docker cp /etc/ssl/crt/docker-stav.octopus.lab.crt kind-cluster-worker2:/etc/ssl/certs
+        docker cp /etc/ssl/crt/docker-yishai.octopus.lab.crt kind-cluster-worker2:/etc/ssl/certs
         docker exec kind-cluster-worker2 update-ca-certificates
         docker exec kind-cluster-worker2 systemctl restart containerd
       become: yes
@@ -577,7 +577,7 @@ Creating a jfrog Artifactory:
         - 8082/tcp
       become: yes
 ```
-entering the gui via: artifactory-stav.octopus.lab
+entering the gui via: artifactory-yishai.octopus.lab
 default username and password - admin:password
 and your license, and then create a docker repository named - docker-local.
 
@@ -634,9 +634,9 @@ and your license, and then create a docker repository named - docker-local.
 
     - name: login and push image
       ansible.builtin.shell: |
-        docker login docker-stav.octopus.lab -u admin -p Password1
-        docker tag flask-app docker-stav.octopus.lab/docker-local/flask-app:latest
-        docker push docker-stav.octopus.lab/docker-local/flask-app:latest
+        docker login docker-yishai.octopus.lab -u admin -p Password1
+        docker tag flask-app docker-yishai.octopus.lab/docker-local/flask-app:latest
+        docker push docker-yishai.octopus.lab/docker-local/flask-app:latest
 ```
 * afterwards create a k8s.yml (The kubernetes deployment of the application)
 ```
@@ -656,14 +656,14 @@ and your license, and then create a docker repository named - docker-local.
       ansible.builtin.shell:
         cmd: |
           kubectl create secret docker-registry regcred \
-          --docker-server=docker-stav.octopus.lab \
+          --docker-server=docker-yishai.octopus.lab \
           --docker-username=admin \
           --docker-password=Password1 \
           --docker-email=your-email@example.com \
           -n flask-app
 
 
-    - name: Create deployment and pull from docker-stav.octopus.lab/docker-local/flask-app:latest (use imagepullsecret)
+    - name: Create deployment and pull from docker-yishai.octopus.lab/docker-local/flask-app:latest (use imagepullsecret)
       ansible.builtin.k8s:
         definition:
           apiVersion: apps/v1
@@ -683,7 +683,7 @@ and your license, and then create a docker repository named - docker-local.
               spec:
                 containers:
                   - name: flask-app
-                    image: docker-stav.octopus.lab/docker-local/flask-app:latest
+                    image: docker-yishai.octopus.lab/docker-local/flask-app:latest
                     ports:
                       - containerPort: 5000
                 imagePullSecrets:
@@ -781,7 +781,7 @@ Move the plays onto the tasks folder and configure the main.yml to this:
 
 - name: Prompt user for input
   pause:
-    prompt: "Please go to stav-artifactory.octopus.lab and create a docker-repository with your jfrog license. Afterwards, press 1 to continue."
+    prompt: "Please go to yishai-artifactory.octopus.lab and create a docker-repository with your jfrog license. Afterwards, press 1 to continue."
   register: user_input
 
 
