@@ -252,9 +252,9 @@ CMD ["python", "app.py"]
 and now just build and push the image into Harbor registry:
 ```
 docker build -t survey-app .
-docker tag survey-app:latest registry-stav.tamnun.lab/hotcold/survey-app:latest
-docker login registry-stav.tamnun.lab
-docker push registry-stav.tamnun.lab/hotcold/survey-app:latest
+docker tag survey-app:latest registry-yishai.tamnun.lab/hotcold/survey-app:latest
+docker login registry-yishai.tamnun.lab
+docker push registry-yishai.tamnun.lab/hotcold/survey-app:latest
 ```
 After uploading the image we can start now with creating the deployment files for the kubernetes. 
 ### survey-service.yaml:
@@ -283,7 +283,7 @@ metadata:
     kubernetes.io/ingress.class: "nginx" # Annotation specifying the Ingress class
 spec:
   rules:
-  - host: survey-stav.tamnun.lab         # Hostname for accessing the application
+  - host: survey-yishai.tamnun.lab         # Hostname for accessing the application
     http:
       paths:
       - path: /                           # Path for accessing the application
@@ -313,7 +313,7 @@ spec:
     spec:
       containers:
       - name: survey-app-container       # Name of the container
-        image: registry-stav.tamnun.lab/hotcold/survey-app:latest  # Docker image for the container
+        image: registry-yishai.tamnun.lab/hotcold/survey-app:latest  # Docker image for the container
         ports:
         - containerPort: 5000            # Port exposed by the container
         env:
@@ -540,7 +540,7 @@ namespace: survey-app
 ingress:
   name: survey-app-ingress
   namespace: survey-app
-  host: survey-stav.tamnun.lab
+  host: survey-yishai.tamnun.lab
   service:
     name: survey-app-service
     port: "80"
@@ -621,7 +621,7 @@ surveydeployment:
   namespace: survey-app
   replicas: "1"
   containerName: survey-app-container
-  containerImage: registry-stav.tamnun.lab/hotcold/survey-app:latest
+  containerImage: registry-yishai.tamnun.lab/hotcold/survey-app:latest
   containerPort: "5000"
   port: "27017"
 ```
