@@ -38,10 +38,10 @@ Great! Now that we have our Python script (sb-backup.py) and configuration file 
 
 Here are the commands to accomplish this
 ```
-mkdir sb-backup-1.0
-mv sb-backup.conf sb-backup.py sb-backup-1.0
-tar --create --file sb-backup-1.0.tar.gz sb-backup-1.0
-mv sb-backup-1.0.tar.gz ~/rpmbuild/SOURCES
+mkdir yg-backup-1.0
+mv yg-backup.conf yg-backup.py yg-backup-1.0
+tar --create --file yg-backup-1.0.tar.gz yg-backup-1.0
+mv yg-backup-1.0.tar.gz ~/rpmbuild/SOURCES
 ```
 Now, we need to create a spec file (sb-backup.spec) in the SPECS directory of our RPM build tree. We’ll use this spec file to define how our RPM package should be built
 This process allows you to create a custom RPM package containing your Python script and configuration file, making it easy to distribute and install on other systems
@@ -65,7 +65,7 @@ Next, we’ll create a directory under /usr/share/nginx/html/repos to serve as o
 ```
 createrepo
 ```
-Now, let’s copy our RPM package into the repository directory. Assuming your RPM package file is named sb-backup-1.0.rpm, you can use the cp command to copy it
+Now, let’s copy our RPM package into the repository directory. Assuming your RPM package file is named yg-backup-1.0.rpm, you can use the cp command to copy it
 
 ![repo](../resources/Packagin%20Python%20Script%20into%20a%20Repository/copying.png)
 
@@ -87,6 +87,6 @@ Once our package is ready, we can share it with other clients in the same networ
 
 After configuring the repository settings, users can install our package by running the following command
 ```
-sudo dnf install sb-backup
+sudo dnf install yg-backup
 ```
 ![installing](../resources/Packagin%20Python%20Script%20into%20a%20Repository/installapp.png)
